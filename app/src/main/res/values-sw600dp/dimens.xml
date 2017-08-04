@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Song pic dimensions-->
+    <dimen name="pic_width">120dp</dimen>
+    <dimen name="pic_height">120dp</dimen>
+
+    <!--Text sizes-->
+    <dimen name="textSize_10sp">12sp</dimen>
+    <dimen name="textSize_12sp">14sp</dimen>
+    <dimen name="textSize_14sp">16sp</dimen>
+    <dimen name="textSize_15sp">17sp</dimen>
+    <dimen name="textSize_16sp">18sp</dimen>
+    <dimen name="textSize_18sp">20sp</dimen>
+    <dimen name="textSize_20sp">22sp</dimen>
+</resources>
