@@ -26,9 +26,14 @@ import java.util.ArrayList;
 
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.ViewHolder> {
 
+    //Feed results array to get the track list
     private ArrayList<RssFeedModel.FeedsModel.FeedResultsModel> resultsModelArrayList;
     Activity activityParent;
+
+    //Config status to check whether the switch to show images is On or OFF
     boolean switchStatus;
+
+    //Used to show the image rounded
     Transformation mTransformation;
 
     public FeedsAdapter(Activity activityParent, ArrayList<RssFeedModel.FeedsModel.FeedResultsModel> resultsModelArrayList, boolean switchStatus) {
@@ -47,6 +52,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
+        /*If switch is ON show images else hide them*/
         if(switchStatus){
             mTransformation = new RoundedTransformationBuilder()
                     .cornerRadiusDp((float) (holder.imgPicture.getLayoutParams().height / 2.0))

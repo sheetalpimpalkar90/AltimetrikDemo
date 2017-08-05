@@ -30,6 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity{
             @Override
             public void run() {
                 SPDSingleton.getInstance().presentFeedsPage(SplashScreenActivity.this);
+                finish();
             }
         }, SPLASH_SCREEN_TIME_OUT);
     }

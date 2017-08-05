@@ -22,6 +22,7 @@ import com.altimetrik.altimetrikdemo.R;
 
 public class BaseActivity extends AppCompatActivity {
 
+    //Initializing toolbar variables
     public Toolbar toolbar;
     public TextView toolBarTitle;
     public Switch configSwitch;

@@ -27,7 +27,11 @@ public class FeedsActivity extends BaseActivity implements WebServiceDelegate {
 
     RecyclerView feedsRecyclerView;
     RecyclerView.LayoutManager layoutManager;
+
+    //Feed Results to get the array of tracks
     ArrayList<RssFeedModel.FeedsModel.FeedResultsModel> feedResultsModels;
+
+    //boolean to store the switch ON/OFF status
     boolean shouldShowImages = true;
 
     @Override
@@ -42,18 +46,25 @@ public class FeedsActivity extends BaseActivity implements WebServiceDelegate {
 
         initViews();
         setListeners();
-        getRssFeeds();
+        //If internet available call the webservice to get the tracks
+        if(isInternetConnectionAvailable()){
+            getRssFeeds();
+        }else{
+            SPDSingleton.getInstance().showShortToast(getResources().getString(R.string.no_internet_connection),
+                    getApplicationContext());
+        }
+
     }
 
-    /*Method to get the configuration status*/
+    /*Method to get the configuration switch ON/OFF status to hide and show images*/
     private void getSwitchStatus() {
         /*Check whether switch ON or OFF*/
-        if(SPDSingleton.getInstance().getStringFromSp(Constants.spSwitchStatus, getApplicationContext()).equalsIgnoreCase("ON")){
-            configSwitch.setChecked(true);
-            shouldShowImages = true;
-        }else{
+        if(SPDSingleton.getInstance().getStringFromSp(Constants.spSwitchStatus, getApplicationContext()).equalsIgnoreCase("OFF")){
             configSwitch.setChecked(false);
             shouldShowImages = false;
+        }else{
+            configSwitch.setChecked(true);
+            shouldShowImages = true;
         }
     }
 
@@ -73,10 +84,12 @@ public class FeedsActivity extends BaseActivity implements WebServiceDelegate {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    //Save the checked status of switch in shared preferences
                     SPDSingleton.getInstance().setStringToSp("ON", Constants.spSwitchStatus, FeedsActivity.this);
                     FeedsAdapter feedsAdapter = new FeedsAdapter(FeedsActivity.this, feedResultsModels, true);
                     feedsRecyclerView.setAdapter(feedsAdapter);
                 }else{
+                    //Save the checked status of switch in shared preferences
                     SPDSingleton.getInstance().setStringToSp("OFF", Constants.spSwitchStatus, FeedsActivity.this);
                     FeedsAdapter feedsAdapter = new FeedsAdapter(FeedsActivity.this, feedResultsModels, false);
                     feedsRecyclerView.setAdapter(feedsAdapter);
@@ -122,13 +135,18 @@ public class FeedsActivity extends BaseActivity implements WebServiceDelegate {
     public void jSONResponseAfterRequest(JSONObject responseObject) {
         SPDSingleton.getInstance().hideProgressDialog();
 
+        //Gson builder to parse the json data coming from server
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
+
+        //Convert the json coming from server to gson that is to DTO class and store the feed results array
 
         RssFeedModel rssFeedModel = gson.fromJson(String.valueOf(responseObject), RssFeedModel.class);
         feedResultsModels = rssFeedModel.getFeedsModel().getFeedResultsModelArrayList();
 
+        //Pass the results array to adapter to populate in recycler view
         FeedsAdapter feedsAdapter = new FeedsAdapter(FeedsActivity.this, feedResultsModels, shouldShowImages);
         feedsRecyclerView.setAdapter(feedsAdapter);
     }
+
 }
